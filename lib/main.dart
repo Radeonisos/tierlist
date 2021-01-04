@@ -9,6 +9,7 @@ import 'package:flutter_app/providers/sub_catgories_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'models/sub_category.dart';
+import 'pages/add_item_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,31 +22,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Category _selectedCategory;
-
-  SubCategory _subSelectedCategory;
-
-  int _subCategoryId;
 
   final heroC = HeroController();
-
-  void _handleCategoryTapped(Category category) {
-    setState(() {
-      _selectedCategory = category;
-    });
-  }
-
-  void _handleSubCategoryTapped(SubCategory subCategory) {
-    setState(() {
-      _subSelectedCategory = subCategory;
-    });
-  }
-
-  void _handleAddItemTapped(int subCategoryId) {
-    setState(() {
-      _subCategoryId = subCategoryId;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +50,7 @@ class _MyAppState extends State<MyApp> {
             ClassementPage.routeName: (ctx) => ClassementPage(
                 (settings.arguments as Map)['subCategory'],
                 (settings.arguments as Map)['imgCategory']),
-            // AddItemPage.routeName: (ctx) => AddItemPage(settings.arguments),
+             AddItemPage.routeName: (ctx) => AddItemPage(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));

@@ -10,8 +10,9 @@ import 'package:provider/provider.dart';
 class AddItemPage extends StatefulWidget {
   static const routeName = '/additem';
 
-  int subCategoryId;
   SubCategory subCategory;
+
+  AddItemPage(this.subCategory);
 
   @override
   _AddItemPageState createState() => _AddItemPageState();
@@ -33,61 +34,67 @@ class _AddItemPageState extends State<AddItemPage> {
         title: Text('Ajouter ${widget.subCategory.title}'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            InkWell(
-              onTap: getImage,
-              child: Container(
-                width: 150,
-                height: 150,
-                color: Colors.grey,
-                child: _image == null
-                    ? Center(child: Text('No image selected.'))
-                    : Image.file(
-                        _image,
-                        fit: BoxFit.cover,
-                      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: getImage,
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  color: Colors.grey,
+                  child: _image == null
+                      ? Center(child: Text('No image selected.'))
+                      : Image.file(
+                          _image,
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
-            ),
-            TextField(
-              controller: controllerTitle,
-              decoration:
-                  InputDecoration(hintText: "Nom ${widget.subCategory.title}"),
-            ),
-            TextField(
-              controller: controllerComment,
-              decoration: InputDecoration(hintText: "Description"),
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: controllerRating,
-              decoration: InputDecoration(hintText: "Note /10"),
-            ),
-            RaisedButton(
-              color: currentColor,
-              onPressed: choiceColor,
-              child: Text(
-                'Couleur',
-                style: TextStyle(color: Colors.white),
+              TextField(
+                controller: controllerTitle,
+                decoration:
+                    InputDecoration(hintText: "Nom ${widget.subCategory.title}"),
               ),
-            ),
-            RaisedButton(
-              onPressed: () async {
-                await Provider.of<ItemProvider>(context, listen: false).addItem(
-                    _image,
-                    currentColor,
-                    controllerTitle.text,
-                    controllerComment.text,
-                    double.parse(controllerRating.text),
-                    widget.subCategoryId);
-                Navigator.pop(context);
-              },
-              child: Text('Ajouter'),
-            )
-          ],
+              SizedBox(height: 20,),
+              TextField(
+                controller: controllerComment,
+                maxLines: 6,
+                decoration: InputDecoration(hintText: "Description"),
+              ),
+              SizedBox(height: 20,),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: controllerRating,
+                decoration: InputDecoration(hintText: "Note /10"),
+              ),
+              SizedBox(height: 20,),
+              RaisedButton(
+                color: currentColor,
+                onPressed: choiceColor,
+                child: Text(
+                  'Couleur',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              RaisedButton(
+                onPressed: () async {
+                  await Provider.of<ItemProvider>(context, listen: false).addItem(
+                      _image,
+                      currentColor,
+                      controllerTitle.text,
+                      controllerComment.text,
+                      double.parse(controllerRating.text),
+                      widget.subCategory.id);
+                  Navigator.pop(context);
+                },
+                child: Text('Ajouter'),
+              )
+            ],
+          ),
         ),
       ),
     );

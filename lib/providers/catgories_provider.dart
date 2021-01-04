@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/helpers/db_helper.dart';
 import 'package:flutter_app/models/category.dart';
@@ -19,17 +21,21 @@ class CategoriesProviders with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addCategory() async {
-    int id = await DBHelper.insert(
-        'categories',
-        Category('Alcool', 'assets/images/alcool.png', Colors.blue,
-                Colors.white70)
-            .toMap());
+  Future<void> deleteOneCategory(int id) async {
 
-    await _categories.add(
-      Category.name('Alcool', 'assets/images/alcool.png', Colors.blue,
-          Colors.white70, id),
-    );
+  }
+
+  Future<void> addCategory(String name, String img) async {
+    List colors = [Colors.red, Colors.green, Colors.orange, Colors.blue, Colors.amber];
+    Random random = new Random();
+    Category category = Category(name, img, colors[random.nextInt(colors.length)],
+        Colors.white70);
+
+    category.id  = await DBHelper.insert(
+        'categories',
+        category
+            .toMap());
+    await _categories.add(category);
     notifyListeners();
   }
 

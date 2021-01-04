@@ -3,6 +3,7 @@ import 'package:flutter_app/helpers/db_helper.dart';
 import 'package:flutter_app/models/category.dart';
 import 'package:flutter_app/providers/catgories_provider.dart';
 import 'package:flutter_app/widgets/card_category.dart';
+import 'package:flutter_app/widgets/dialog_add_category.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,6 +65,7 @@ class _HomeState extends State<Home> {
               colorEnd: category.colorEnd,
               id: category.id,
               onTap: () => goToOneCategory(category),
+              onDelete: deleteCategory,
             );
           }),
         ),
@@ -71,12 +73,25 @@ class _HomeState extends State<Home> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () async {
-          await Provider.of<CategoriesProviders>(context, listen: false)
-              .addCategory();
-        },
+        onPressed: openAddCategory,
       ),
     );
+  }
+
+  void deleteCategory() {
+    print('DeleteCategory');
+  }
+
+  void openAddCategory(){
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return DialogAddCategory(addCategory);
+        });
+  }
+
+  void addCategory(String name, String img) async{
+    await Provider.of<CategoriesProviders>(context, listen: false).addCategory(name,img);
   }
 
   void goToOneCategory(Category category) {

@@ -5,6 +5,8 @@ import 'package:flutter_app/widgets/card_classement.dart';
 import 'package:flutter_app/widgets/classement_viewer.dart';
 import 'package:provider/provider.dart';
 
+import 'add_item_page.dart';
+
 class ClassementPage extends StatefulWidget {
   static const routeName = '/classement';
 
@@ -46,6 +48,11 @@ class _ClassementPageState extends State<ClassementPage> {
                 icon: Icon(Icons.add),
                 onPressed: () {
                   // go to add item page
+                  Navigator.pushNamed(
+                    context,
+                    AddItemPage.routeName,
+                    arguments: widget.subCategory,
+                  );
                 })
           ],
         ),
