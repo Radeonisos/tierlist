@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/category.dart';
 import 'package:flutter_app/pages/category_page.dart';
 import 'package:flutter_app/pages/classement_page.dart';
-import 'package:flutter_app/pages/home.dart';
+import 'package:flutter_app/pages/sub_category_page.dart';
 import 'package:flutter_app/providers/catgories_provider.dart';
 import 'package:flutter_app/providers/item_provider.dart';
-import 'package:flutter_app/providers/sub_catgories_provider.dart';
+import 'package:flutter_app/providers/sub_categories_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'models/sub_category.dart';
 import 'pages/add_item_page.dart';
 
 void main() {
@@ -22,7 +20,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   final heroC = HeroController();
 
   @override
@@ -41,16 +38,17 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Home(),
+        home: CategoryPage(),
         onGenerateRoute: (RouteSettings settings) {
           print('build route for ${settings.name}');
           var routes = <String, WidgetBuilder>{
-            Home.routeName: (ctx) => Home(),
-            CategoryPage.routeName: (ctx) => CategoryPage(settings.arguments),
+            CategoryPage.routeName: (ctx) => CategoryPage(),
+            SubCategoryPage.routeName: (ctx) =>
+                SubCategoryPage(settings.arguments),
             ClassementPage.routeName: (ctx) => ClassementPage(
                 (settings.arguments as Map)['subCategory'],
                 (settings.arguments as Map)['imgCategory']),
-             AddItemPage.routeName: (ctx) => AddItemPage(settings.arguments),
+            AddItemPage.routeName: (ctx) => AddItemPage(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));

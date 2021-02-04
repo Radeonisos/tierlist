@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/category.dart';
+import 'package:flutter_app/models/sub_category.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
@@ -39,20 +40,18 @@ class DBHelper {
 
     await DBHelper.insert(
         'categories',
-        Category('Nourriture', 'assets/images/food.png', Colors.green,
-                Colors.greenAccent)
-            .toMap());
-
-    await DBHelper.insert(
-        'categories',
         Category('Lieux', 'assets/images/lieux.png', Colors.deepOrange,
                 Colors.yellow)
             .toMap());
 
-    await DBHelper.insert(
+    int id = await DBHelper.insert(
         'categories',
         Category('Oeuvre', 'assets/images/oeuvre.png', Colors.deepOrange,
                 Colors.yellow)
             .toMap());
+    await DBHelper.insert(
+        'subcategories', SubCategory(categoryId: id, title: 'Films').toMap());
+    await DBHelper.insert(
+        'subcategories', SubCategory(categoryId: id, title: 'Séries').toMap());
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class DialogAddCategory extends StatefulWidget {
-
   Function(String name, String img) onPressedAdd;
 
   DialogAddCategory(this.onPressedAdd);
@@ -11,7 +10,6 @@ class DialogAddCategory extends StatefulWidget {
 }
 
 class _DialogAddCategoryState extends State<DialogAddCategory> {
-
   // todo : refacto this var
   List<String> iconCategories = [
     'assets/images/alcool.png',
@@ -31,15 +29,17 @@ class _DialogAddCategoryState extends State<DialogAddCategory> {
     'assets/images/oeuvre.png',
   ];
 
-  String nameOfCategory;
-  int indexChoiceImg=0;
+  String nameOfCategory = '';
+  int indexChoiceImg = 0;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      // todo : change grey for more white
-      backgroundColor: Colors.grey,
-      title: Text('Ajouter une catégorie', style: TextStyle(color: Colors.white),),
+      backgroundColor: const Color(0xFF4d4d4d),
+      title: Text(
+        'Ajouter une catégorie',
+        style: TextStyle(color: Colors.white),
+      ),
       content: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width / 1.5,
@@ -48,61 +48,75 @@ class _DialogAddCategoryState extends State<DialogAddCategory> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height/2.5,
+                height: 260,
                 child: GridView.count(
                   crossAxisSpacing: 1,
                   mainAxisSpacing: 1,
                   crossAxisCount: 4,
-                  children: List.generate(iconCategories.length,
-                        (index) => Container(
-                          padding: const EdgeInsets.all(3.0),
-                          decoration: BoxDecoration(
-                            color: indexChoiceImg == index? Colors.blue: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(2)),
-                          ),
-                          child: InkWell(child: Image.asset(iconCategories[index]),
-                          onTap: (){
-                            setState(() {
-                              indexChoiceImg = index;
-                            });
-                          },),),),),
+                  children: List.generate(
+                    iconCategories.length,
+                    (index) => Container(
+                      padding: const EdgeInsets.all(3.0),
+                      decoration: BoxDecoration(
+                        color: indexChoiceImg == index
+                            ? Colors.blue
+                            : Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(2)),
+                      ),
+                      child: InkWell(
+                        child: Image.asset(iconCategories[index]),
+                        onTap: () {
+                          setState(() {
+                            indexChoiceImg = index;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               ),
               Container(
                 color: Colors.white,
                 child: TextField(
+                  textCapitalization: TextCapitalization.words,
                   onChanged: (value) {
                     setState(() {
                       nameOfCategory = value;
                     });
                   },
-                  decoration: InputDecoration(
-                    hintText: 'Nom catégorie'
-                  ),
+                  onEditingComplete: addCategory,
+                  decoration: InputDecoration(hintText: 'Nom catégorie'),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FlatButton(
-                    child: Text('Annuler', style: TextStyle(color: Colors.red),),
-                    onPressed: (){
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text('Valider', style: TextStyle(color: Colors.blue),),
-                    onPressed: (){
-                      widget.onPressedAdd(nameOfCategory,iconCategories[indexChoiceImg]);
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              )
             ],
           ),
         ),
       ),
+      actions: [
+        TextButton(
+          child: Text(
+            'Annuler',
+            style: TextStyle(color: Colors.red, fontSize: 17),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: Text(
+            'Valider',
+            style: TextStyle(fontSize: 17),
+          ),
+          onPressed: nameOfCategory.isEmpty ? null : addCategory,
+        )
+      ],
     );
   }
 
+  void addCategory() {
+    if (nameOfCategory.isNotEmpty) {
+      widget.onPressedAdd(nameOfCategory, iconCategories[indexChoiceImg]);
+      Navigator.of(context).pop();
+    }
+  }
 }

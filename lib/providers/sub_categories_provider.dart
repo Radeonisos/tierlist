@@ -23,6 +23,15 @@ class SubCategoriesProviders with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteOneSubCategory(int id) async {
+    final db = await DBHelper.dataBaseTierList();
+    await db
+        .rawDelete('DELETE FROM subcategories WHERE id = ?', [id.toString()]);
+    // TODO remove all children
+    _subCategories.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
+
   Future<void> addSubCategory(String title, int categoryId) async {
     SubCategory subCategory = SubCategory(categoryId: categoryId, title: title);
 

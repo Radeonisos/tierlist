@@ -29,6 +29,7 @@ class ItemProvider extends ChangeNotifier {
 
     final dataList = await DBHelper.getData('item');
     _items = dataList.map((item) => Item.fromMap(item)).toList();
+    print('TEST');
 
     _items.removeWhere((element) => element.subCategoryId != subCategoryId);
     _items.sort((a, b) => a.rating.compareTo(b.rating));

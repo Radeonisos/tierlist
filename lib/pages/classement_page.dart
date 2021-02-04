@@ -23,7 +23,9 @@ class _ClassementPageState extends State<ClassementPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ItemProvider>(context, listen: false).fetchAndSetItems(1);
+    print(widget.subCategory.id);
+    Provider.of<ItemProvider>(context, listen: false)
+        .fetchAndSetItems(widget.subCategory.id);
   }
 
   @override

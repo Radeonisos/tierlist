@@ -22,19 +22,26 @@ class CategoriesProviders with ChangeNotifier {
   }
 
   Future<void> deleteOneCategory(int id) async {
-
+    final db = await DBHelper.dataBaseTierList();
+    await db.rawDelete('DELETE FROM categories WHERE id = ?', [id.toString()]);
+    // TODO remove all children
+    _categories.removeWhere((element) => element.id == id);
+    notifyListeners();
   }
 
   Future<void> addCategory(String name, String img) async {
-    List colors = [Colors.red, Colors.green, Colors.orange, Colors.blue, Colors.amber];
+    List colors = [
+      Colors.red,
+      Colors.green,
+      Colors.orange,
+      Colors.blue,
+      Colors.amber
+    ];
     Random random = new Random();
-    Category category = Category(name, img, colors[random.nextInt(colors.length)],
-        Colors.white70);
+    Category category = Category(
+        name, img, colors[random.nextInt(colors.length)], Colors.white70);
 
-    category.id  = await DBHelper.insert(
-        'categories',
-        category
-            .toMap());
+    category.id = await DBHelper.insert('categories', category.toMap());
     await _categories.add(category);
     notifyListeners();
   }
@@ -49,15 +56,6 @@ class CategoriesProviders with ChangeNotifier {
     await _categories.add(
       Category.name('Alcool', 'assets/images/alcool.png', Colors.blue,
           Colors.white70, id),
-    );
-    int id1 = await DBHelper.insert(
-        'categories',
-        Category('Nourriture', 'assets/images/food.png', Colors.green,
-                Colors.greenAccent)
-            .toMap());
-    await _categories.add(
-      Category.name('Nourriture', 'assets/images/food.png', Colors.green,
-          Colors.greenAccent, id1),
     );
     int id2 = await DBHelper.insert(
         'categories',
